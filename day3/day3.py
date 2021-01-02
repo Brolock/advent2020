@@ -2,12 +2,10 @@
 
 import argparse
 from pathlib import Path
-import numpy as np
-
 
 def get_nb_trees(forest, slopes):
     # Trees encountered on each slope
-    trees = np.zeros(len(slopes), dtype=np.int32)
+    trees = [0] * len(slopes)
 
     for row_id, row in enumerate(forest):
         for slope_id, slope in enumerate(slopes):
@@ -17,6 +15,12 @@ def get_nb_trees(forest, slopes):
                 trees[slope_id] += 1
 
     return trees
+
+def reduce_mul(l):
+    result = 1
+    for x in l:
+        result *= x
+    return result
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -33,6 +37,7 @@ if __name__ == "__main__":
     for i, slope in enumerate(slopes):
         print(f"Found {trees[i]} trees on slope {slope}")
 
-    print(f"Final result = {np.prod(trees)}")
-    print(np.prod(trees) == 2431272960)
 
+    result = reduce_mul(trees)
+    print(f"Final result = {result}")
+    print(result == 2431272960)
